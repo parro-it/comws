@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "mocha test/*_test.js test/**/*_test.js --require ./test/init || echo failed",
+    "test-shippable": "mocha test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\"|| echo failed",
     "build": "babel src/index.js -o dist/index.js"
      
   },
