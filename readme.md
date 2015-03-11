@@ -1,7 +1,7 @@
   [![gitter][gitter-image]][gitter-url]
   [![NPM version][npm-image]][npm-url]
   [![build status][shippable-image]][shippable-url]
-  [![Test coverage][coverage-image]][coverage-url]
+  ![Test coverage](/build/coverage.svg?raw=true)
 
   Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co)
   to make node applications more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa ones. Use of generators also greatly increases the readability and robustness of your application.
@@ -63,7 +63,5 @@ $ npm install && npm test
 [npm-url]: https://npmjs.org/package/comws
 [shippable-image]: https://api.shippable.com/projects/55005c5b5ab6cc1352981ec6/badge?branchName=master
 [shippable-url]: https://app.shippable.com/projects/55005c5b5ab6cc1352981ec6/builds/latest
-[coverage-image]: https://img.shields.io/coveralls/shes/comws/master.svg?style=flat-square
-[coverage-url]: #
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]: https://gitter.im/shes/comws
