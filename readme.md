@@ -1,7 +1,7 @@
   [![gitter][gitter-image]][gitter-url]
   [![NPM version][npm-image]][npm-url]
   [![build status][shippable-image]][shippable-url]
-  ![Test coverage](/build/coverage.svg?raw=true)
+  ![Test coverage](/build/coverage.png?raw=true)
 
   Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co)
   to make node applications more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa ones. Use of generators also greatly increases the readability and robustness of your application.
