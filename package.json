@@ -4,8 +4,8 @@
   "description": "koa like middlewares for any app",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha test/*_test.js test/**/*_test.js --require ./test/init || echo failed",
-    "test-shippable": "mkdir -p ./shippable/testresults && mocha test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\" > ./shippable/testresults/mocha.xml",
+    "test": "mocha -- test/*_test.js test/**/*_test.js --require ./test/init || echo failed",
+    "test-shippable": "mkdir -p ./shippable/testresults && istanbul cover --dir ./shippable/codecoverage --report cobertura _mocha -- test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\" > ./shippable/testresults/mocha.xml",
     "build": "babel src/index.js -o dist/index.js"
   },
   "repository": {
