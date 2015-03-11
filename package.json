@@ -1,6 +1,6 @@
 {
   "name": "comws",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "koa like middlewares for any app",
   "main": "dist/index.js",
   "scripts": {
