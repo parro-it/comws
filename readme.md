@@ -15,7 +15,7 @@ $ npm install co-mws --save
 
   Co-mws is supported in all versions of [iojs](https://iojs.org) without any flags.
 
-  To use co-mws with node, you must be running __node 0.12.__ or higher for generator and promise support.
+  To use co-mws with node, you must be running __node 0.12.0__ or higher for generator and promise support.
 
 ## Getting started
 
@@ -66,4 +66,4 @@ $ npm install && npm test
 [coveralls-image]: https://img.shields.io/coveralls/shes/co-mws/master.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/shes/co-mws?branch=master
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-url]: https://gitter.im/shes/co-mws?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+[gitter-url]: https://gitter.im/shes/co-mws
