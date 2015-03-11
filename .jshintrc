@@ -1,0 +1,14 @@
+{
+    "esnext": true,
+    "indent": 4,
+    "node": true,
+    "noyield": true,
+    "globals": {
+        "Promise": true,
+        "describe": true,
+        "it": true,
+        "before": true,
+        "after": true,
+        "should": true
+    }
+}
