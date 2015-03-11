@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "mocha -- test/*_test.js test/**/*_test.js --require ./test/init || echo failed",
-    "test-shippable": "mkdir -p ./shippable/testresults && istanbul cover --dir ./shippable/codecoverage --report cobertura _mocha -- test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\" > ./shippable/testresults/mocha.xml && node build/badge.js",
+    "test-shippable": "mkdir -p ./shippable/testresults && istanbul cover --dir ./shippable/codecoverage --report cobertura _mocha -- test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\" > ./shippable/testresults/mocha.xml",
+    "badge": "node build/badge.js && convert build/coverage.svg build/coverage.png",
     "build": "babel src/index.js -o dist/index.js"
   },
   "repository": {
