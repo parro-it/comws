@@ -1,6 +1,6 @@
   [![gitter][gitter-image]][gitter-url]
   [![NPM version][npm-image]][npm-url]
-  [![build status][travis-image]][travis-url]
+  [![build status][shippable-image]][shippable-url]
   [![Test coverage][coveralls-image]][coveralls-url]
 
   Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co)
@@ -61,8 +61,8 @@ $ npm install && npm test
 
 [npm-image]: https://img.shields.io/npm/v/comws.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/comws
-[travis-image]: https://img.shields.io/travis/shes/comws/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/shes/comws
+[shippable-image]: https://api.shippable.com/projects/55005c5b5ab6cc1352981ec6/badge?branchName=master
+[shippable-url]: https://app.shippable.com/projects/55005c5b5ab6cc1352981ec6/builds/latest
 [coveralls-image]: https://img.shields.io/coveralls/shes/comws/master.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/shes/comws?branch=master
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
