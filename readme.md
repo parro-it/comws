@@ -19,7 +19,8 @@ $ npm install comws --save
 
 ## Getting started
 
-TBD
+See all example in example folder to get started. 
+Open an issue if you have any question or suggestion.
 
 ## Example
 
@@ -50,6 +51,10 @@ mws.run(ctx).then(function(){
 ```
 $ npm install && npm test
 ```
+
+## Contribute
+
+Please, PR are welcomed!
 
 ## Authors
 
