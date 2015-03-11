@@ -1,5 +1,5 @@
 {
-  "name": "co-mws",
+  "name": "comws",
   "version": "1.0.0",
   "description": "koa like middlewares for any app",
   "main": "dist/index.js",

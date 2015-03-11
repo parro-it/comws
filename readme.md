@@ -4,18 +4,18 @@
   [![Test coverage][coveralls-image]][coveralls-url]
 
   Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co)
-  to make web applications and APIs more enjoyable to write. Co-mws middleware flow in a stack-like manner exactly like koa onws. Use of generators also greatly increases the readability and robustness of your application.
+  to make web applications and APIs more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa onws. Use of generators also greatly increases the readability and robustness of your application.
 
   
 ## Installation
 
 ```
-$ npm install co-mws --save
+$ npm install comws --save
 ```
 
-  Co-mws is supported in all versions of [iojs](https://iojs.org) without any flags.
+  Comws is supported in all versions of [iojs](https://iojs.org) without any flags.
 
-  To use co-mws with node, you must be running __node 0.12.0__ or higher for generator and promise support.
+  To use comws with node, you must be running __node 0.12.0__ or higher for generator and promise support.
 
 ## Getting started
 
@@ -24,7 +24,7 @@ TBD
 ## Example
 
 ```js
-var CoMws = require('co-mws');
+var CoMws = require('comws');
 var mws = new CoMws();
 
 mws.use(function *(next){
@@ -59,11 +59,11 @@ $ npm install && npm test
 
   MIT
 
-[npm-image]: https://img.shields.io/npm/v/co-mws.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/co-mws
-[travis-image]: https://img.shields.io/travis/shes/co-mws/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/shes/co-mws
-[coveralls-image]: https://img.shields.io/coveralls/shes/co-mws/master.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/shes/co-mws?branch=master
+[npm-image]: https://img.shields.io/npm/v/comws.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/comws
+[travis-image]: https://img.shields.io/travis/shes/comws/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/shes/comws
+[coveralls-image]: https://img.shields.io/coveralls/shes/comws/master.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/shes/comws?branch=master
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-url]: https://gitter.im/shes/co-mws
+[gitter-url]: https://gitter.im/shes/comws
