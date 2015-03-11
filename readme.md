@@ -15,7 +15,7 @@ $ npm install comws --save
 
   Comws is supported in all versions of [iojs](https://iojs.org) without any flags.
 
-  To use comws with node, you must be running __node 0.12.0__ or higher for generator and promise support.
+  To use comws with node, you must be running __node > 0.11.16__ or __node > 0.12.0__ for generator and promise support, and must run node with the --harmony-generators or --harmony flag.
 
 ## Getting started
 

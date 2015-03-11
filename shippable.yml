@@ -1,10 +1,10 @@
-# language setting
 language: node_js
 
-# version numbers, testing against two versions of node
 node_js:
-  - 0.12.0
+  - 0.11
 
-# Running npm test to run your test cases
+before_script:
+ - alias node="node --harmony"
+
 script:
  - npm run test-shippable
