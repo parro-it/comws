@@ -57,11 +57,11 @@ describe('CoMws', () => {
                 throw new Error('test-error');
             });
 
-            try {
-                yield mws.run({});    
-            } catch(err){
+            mws.use(function *(ctx, err, next){
                 ex = err;
-            }
+            });
+
+            yield mws.run({});    
             
         });
         

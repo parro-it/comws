@@ -2,7 +2,7 @@
 
 import co from 'co';
 import isPromise from 'is-promise';
-//import PrettyError from 'pretty-error';
+import PrettyError from 'pretty-error';
 
 function isGenerator(fn) {
 
@@ -35,10 +35,10 @@ export default class CoMws {
 
         } 
 
-        //var pe = new PrettyError();
-        //var renderedError = pe.render(new Error('Some error message'));
+        var pe = new PrettyError();
+        var renderedError = pe.render(err);
 
-        console.error(err.stack);
+        console.error(renderedError);
         return err;
 
     }
@@ -69,22 +69,33 @@ export default class CoMws {
 
             const runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
 
-
+            let result;
             try {
 
                 if (runner.length === 2) {
-                    return runner(ctx, next);
+                    result = runner(ctx, next);
 
                 } else {
-                    return runner.call(ctx, next);
+                    result = runner.call(ctx, next);
 
                 }
+                
+                
 
             } catch (err) {
-                console.log(err.stack);
                 return next(err);
 
             }
+
+             if (isPromise(result)) {
+
+                 return result.catch(next);
+
+             } else {
+
+                 return result;
+
+             }
 
         };
 

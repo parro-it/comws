@@ -10,7 +10,7 @@ var co = _interopRequire(require("co"));
 
 var isPromise = _interopRequire(require("is-promise"));
 
-//import PrettyError from 'pretty-error';
+var PrettyError = _interopRequire(require("pretty-error"));
 
 function isGenerator(fn) {
 
@@ -46,10 +46,10 @@ var CoMws = (function () {
                     idxErrMiddleware++;
                 }
 
-                //var pe = new PrettyError();
-                //var renderedError = pe.render(new Error('Some error message'));
+                var pe = new PrettyError();
+                var renderedError = pe.render(err);
 
-                console.error(err.stack);
+                console.error(renderedError);
                 return err;
             }
         },
@@ -80,16 +80,24 @@ var CoMws = (function () {
 
                     var runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
 
+                    var result = undefined;
                     try {
 
                         if (runner.length === 2) {
-                            return runner(ctx, next);
+                            result = runner(ctx, next);
                         } else {
-                            return runner.call(ctx, next);
+                            result = runner.call(ctx, next);
                         }
                     } catch (err) {
-                        console.log(err.stack);
                         return next(err);
+                    }
+
+                    if (isPromise(result)) {
+
+                        return result["catch"](next);
+                    } else {
+
+                        return result;
                     }
                 };
 
