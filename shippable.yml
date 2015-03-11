@@ -1,8 +1,6 @@
 # language setting
 language: node_js
 
-build_image: nodesource/trusty:0.12.0
-
 # version numbers, testing against two versions of node
 node_js:
   - 0.12.0
