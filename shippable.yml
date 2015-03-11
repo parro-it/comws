@@ -3,6 +3,8 @@ language: node_js
 node_js:
   - 0.11
 
+archive: true 
+
 before_script:
  - alias node="node --harmony"
 
