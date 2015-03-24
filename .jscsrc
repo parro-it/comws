@@ -1,0 +1,17 @@
+{
+    "preset": "Airbnb"
+    "requireParenthesesAroundIIFE": true,
+    "maximumLineLength": 120,
+    "validateLineBreaks": null,
+    "validateIndentation": 4,
+
+    "disallowKeywords": ["with"],
+    "disallowSpacesInsideObjectBrackets": null,
+
+    "safeContextKeyword": "_this",
+    "requireCurlyBraces": [ "if","for","while" ],
+    "esnext": true,
+    "excludeFiles": [
+        "test/data/**"
+    ]
+}
