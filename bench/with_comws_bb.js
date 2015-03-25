@@ -8,7 +8,7 @@ function sumNatural(i){
 }
 
 
-var mws = new CoMws();
+var mws = new CoMws('bb');
 
 for (var i=0; i<100; i++) {
     mws.use(sumNatural(i));
@@ -17,8 +17,6 @@ for (var i=0; i<100; i++) {
 
 export default function run() {
     var ctx = {result:0};
-
-
 
     return mws.run(ctx).then(function(){
       return ctx.result;

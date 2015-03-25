@@ -9,9 +9,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "comws": "^1.0.0"
+    "composition": "^2.1.1",
+    "comws": "^1.0.0",
+    "koa": "^0.18.1",
+    "benchmark": "^1.0.0"
+
   },
   "devDependencies": {
-    "koa": "^0.18.1"
+
   }
 }

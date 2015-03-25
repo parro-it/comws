@@ -1,6 +1,7 @@
 'use strict';
 
-import co from 'co';
+import { wrap } from 'co';
+import { coroutine } from 'bluebird';
 import isPromise from 'is-promise';
 import PrettyError from 'pretty-error';
 
@@ -10,8 +11,12 @@ function isGenerator(fn) {
 }
 
 export default class CoMws {
-    constructor() {
+    constructor(kind = 'co') {
+        //console.log(kind);
         this.mws = [];
+        this.go = kind === 'co' ? wrap : coroutine;
+        //console.log('choose'+this.go.name);
+
     }
 
     use(mw) {
@@ -27,13 +32,13 @@ export default class CoMws {
             let errMiddleware = this.mws[idxErrMiddleware];
 
             if (errMiddleware.length === 3) {
-                const runner = co.wrap(errMiddleware);
+                const runner = this.go(errMiddleware);
                 return runner(ctx, err, () => {});
             }
 
             idxErrMiddleware++;
 
-        } 
+        }
 
         var pe = new PrettyError();
         var renderedError = pe.render(err);
@@ -61,13 +66,13 @@ export default class CoMws {
                 let result = step(idx + 1);
 
                 if (isPromise(result)) {
-                	return result;	
+                	return result;
                 }  else {
                 	return result instanceof Error ? Promise.reject(result) : Promise.resolve(result);
                 }
             };
 
-            const runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
+            const runner = isGenerator(currentMw) ? this.go(currentMw) : currentMw;
 
             let result;
             try {
@@ -79,8 +84,8 @@ export default class CoMws {
                     result = runner.call(ctx, next);
 
                 }
-                
-                
+
+
 
             } catch (err) {
                 return next(err);

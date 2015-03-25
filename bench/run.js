@@ -1,5 +1,7 @@
 import comwsRun from './with_comws';
+import comwsBBRun from './with_comws_bb';
 import koaRun from './with_koa';
+import composition from './with_composition';
 
 import Benchmark from 'benchmark';
 var benchCoMws = new Benchmark.Suite();
@@ -12,10 +14,11 @@ function makeBench(fnToRun,name){
         fn (deferred) {
             fnToRun().then((result)=>{
                 if(result !== 4950){
-                    benchCoMws.abort('bad result:' + result);
+                    console.error('bad result:' + result);
+                    benchCoMws.abort();
                 }
                 deferred.resolve();
-            });
+            }).catch(console.log);
 
         },
 
@@ -25,8 +28,10 @@ function makeBench(fnToRun,name){
     });
 }
 
-benchCoMws.add(comwsRun,'comws');
-benchCoMws.add(koaRun,'koa');
+benchCoMws.add(makeBench(comwsRun,'comws'));
+benchCoMws.add(makeBench(comwsBBRun,'comws+bluebird'));
+benchCoMws.add(makeBench(koaRun,'koa'));
+benchCoMws.add(makeBench(composition,'composition'));
 
 benchCoMws.on('cycle', function(event) {
 
