@@ -1,14 +1,14 @@
 {
   "name": "comws",
   "version": "1.0.1",
-  "description": "common middlewares for node",
+  "description": "Expressive middleware for node.js",
   "scripts": {
     "test": "node test | faucet && eslint ."
   },
   "engines": {
     "node": ">=4"
   },
-  "repository": "parro-it/comws.git",
+  "repository": "parro-it/comws",
   "keywords": [
     "co",
     "middlewares",

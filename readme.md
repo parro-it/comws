@@ -1,71 +1,57 @@
 # comws
 
-[![NPM version][npm-image]][npm-url]
-[![build status][shippable-image]][shippable-url]
+> Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co) to make node applications more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa ones. Use of generators also greatly increases the readability and robustness of your application.
 
-  Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co) to make node applications more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa ones. Use of generators also greatly increases the readability and robustness of your application.
+[![Travis Build Status](https://img.shields.io/travis/parro-it/comws.svg)](http://travis-ci.org/parro-it/comws)
+[![NPM module](https://img.shields.io/npm/v/comws.svg)](https://npmjs.org/package/comws)
+[![NPM downloads](https://img.shields.io/npm/dt/comws.svg)](https://npmjs.org/package/comws)
 
+# Installation
 
-## Installation
-
+```bash
+npm install comws --save
 ```
-$ npm install comws --save
-```
 
-  Comws is supported in all versions of [iojs](https://iojs.org) without any flags.
+Comws is supported in all versions of node > 4.
 
-  To use comws with node, you must be running __node > 0.11.16__ or __node > 0.12.0__ for generator and promise support, and must run node with the --harmony-generators or --harmony flag.
-
-## Getting started
+# Getting started
 
 See all example in example folder to get started.
 Open an issue if you have any question or suggestion.
 
-## Example
+# Example
 
 ```js
 var CoMws = require('comws');
 var mws = new CoMws();
 
 mws.use(function *(next){
-    this.result += ' hello';
-    yield next();
+  this.result += ' hello';
+  yield next();
 });
 
 mws.use(function *(next){
-    this.result += ' world';
-    yield next();
+  this.result += ' world';
+  yield next();
 });
 
-var ctx = {result:'yet another'};
+var ctx = {result: 'yet another'};
 
-mws.run(ctx).then(function(){
+mws.run(ctx).then(function() {
   //ctx.result === 'yet another hello world'
 });
 
 ```
 
-## Running tests
+# Running tests
 
 ```
 $ npm install && npm test
 ```
 
-## Contribute
-
-Please, PR are welcomed!
-
-## Authors
-
-  - [Andrea Parodi](https://github.com/parro-it)
 
 # License
 
-  MIT
+The MIT License (MIT)
 
-[npm-image]: https://img.shields.io/npm/v/comws.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/comws
-[shippable-image]: https://api.shippable.com/projects/55005c5b5ab6cc1352981ec6/badge?branchName=master
-[shippable-url]: https://app.shippable.com/projects/55005c5b5ab6cc1352981ec6/builds/latest
-[gitter-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-url]: https://gitter.im/shes/comws
+Copyright (c) 2016 parro-it
