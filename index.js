@@ -61,10 +61,14 @@ module.exports = class CoMws {
           return result;
         }
 
-        return result instanceof Error ? Promise.reject(result) : Promise.resolve(result);
+        return result instanceof Error
+          ? Promise.reject(result)
+          : Promise.resolve(result);
       };
 
-      const runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
+      const runner = isGenerator(currentMw)
+        ? co.wrap(currentMw)
+        : currentMw;
 
       let result;
 
