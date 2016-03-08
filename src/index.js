@@ -1,105 +1,92 @@
 'use strict';
 
-import co from 'co';
-import isPromise from 'is-promise';
-import PrettyError from 'pretty-error';
+const co = require('co');
+const isPromise = require('is-promise');
+const PrettyError = require('pretty-error');
 
 function isGenerator(fn) {
-
-    return fn.constructor.name.endsWith('GeneratorFunction');
+  return fn.constructor.name.endsWith('GeneratorFunction');
 }
 
-export default class CoMws {
-    constructor() {
-        this.mws = [];
-    }
+module.exports = class CoMws {
+  constructor() {
+    this.mws = [];
+  }
 
-    use(mw) {
-        this.mws.push(mw);
+  use(mw) {
+    this.mws.push(mw);
 
-    }
+  }
 
-    handleError(ctx, err, mwIdx) {
-        let idxErrMiddleware = mwIdx + 1;
+  handleError(ctx, err, mwIdx) {
+    let idxErrMiddleware = mwIdx + 1;
 
-        while (idxErrMiddleware < this.mws.length) {
+    while (idxErrMiddleware < this.mws.length) {
 
-            let errMiddleware = this.mws[idxErrMiddleware];
+      const errMiddleware = this.mws[idxErrMiddleware];
 
-            if (errMiddleware.length === 3) {
-                const runner = co.wrap(errMiddleware);
-                return runner(ctx, err, () => {});
-            }
+      if (errMiddleware.length === 3) {
+        const runner = co.wrap(errMiddleware);
+        return runner(ctx, err, () => {});
+      }
 
-            idxErrMiddleware++;
-
-        } 
-
-        var pe = new PrettyError();
-        var renderedError = pe.render(err);
-
-        console.error(renderedError);
-        return err;
+      idxErrMiddleware++;
 
     }
 
-    run(ctx) {
+    const pe = new PrettyError();
+    const renderedError = pe.render(err);
 
-        const step = (idx) => {
-            if (idx === this.mws.length) {
-                return Promise.resolve(true);
-            }
+    process.stderr.write(renderedError.stack + '\n');
+    return err;
+  }
 
+  run(ctx) {
 
-            const currentMw = this.mws[idx];
+    const step = (idx) => {
+      if (idx === this.mws.length) {
+        return Promise.resolve(true);
+      }
 
-            const next = (err) => {
-                if (err) {
-                    return this.handleError(ctx, err, idx);
-                }
+      const currentMw = this.mws[idx];
 
-                let result = step(idx + 1);
+      const next = (err) => {
+        if (err) {
+          return this.handleError(ctx, err, idx);
+        }
 
-                if (isPromise(result)) {
-                	return result;	
-                }  else {
-                	return result instanceof Error ? Promise.reject(result) : Promise.resolve(result);
-                }
-            };
+        const result = step(idx + 1);
 
-            const runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
+        if (isPromise(result)) {
+          return result;
+        }
 
-            let result;
-            try {
+        return result instanceof Error ? Promise.reject(result) : Promise.resolve(result);
+      };
 
-                if (runner.length === 2) {
-                    result = runner(ctx, next);
+      const runner = isGenerator(currentMw) ? co.wrap(currentMw) : currentMw;
 
-                } else {
-                    result = runner.call(ctx, next);
+      let result;
 
-                }
-                
-                
+      try {
 
-            } catch (err) {
-                return next(err);
+        if (runner.length === 2) {
+          result = runner(ctx, next);
+        } else {
+          result = runner.call(ctx, next);
+        }
 
-            }
+      } catch (err) {
+        return next(err);
+      }
 
-             if (isPromise(result)) {
+      if (isPromise(result)) {
+        return result.catch(next);
+      }
 
-                 return result.catch(next);
+      return result;
+    };
 
-             } else {
-
-                 return result;
-
-             }
-
-        };
-
-        return step(0);
-
-    }
-}
+    return step(0);
+  }
+};

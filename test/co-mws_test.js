@@ -4,37 +4,37 @@ const CoMws = require('../src');
 const co = require('co');
 const test = require('tape');
 
-const setupMws = co.wrap(function *(){
+const setupMws = co.wrap(function *() {
   const  mws = new CoMws();
-  const ctx = {result:'yet another'};
+  const ctx = {result: 'yet another'};
 
-  mws.use(function *(next){
+  mws.use(function *(next) {
     this.result += yield Promise.resolve(' hello');
     yield next();
   });
 
-  mws.use(function *(next){
+  mws.use(function *(next) {
     this.result += yield Promise.resolve(' world');
     yield next();
   });
 
   yield mws.run(ctx);
 
-  return {mws, ctx}
+  return {mws, ctx};
 });
 
-const setupErrorMws = co.wrap(function *(){
+const setupErrorMws = co.wrap(function *() {
   const  mws = new CoMws();
-  mws.use(function *(next){
+  mws.use(function *(next) {
     this.result = ('hello');
     yield next();
   });
 
-  mws.use(function *(next){
+  mws.use(function *() {
     throw new Error('test-error');
   });
 
-  mws.use(function *(ctx, err, next){
+  mws.use(function *(ctx, err) {
     ctx.ex = err;
   });
 
@@ -42,7 +42,7 @@ const setupErrorMws = co.wrap(function *(){
 
   yield mws.run(ctx);
 
-  return {mws,ctx};
+  return {mws, ctx};
 });
 
 test('register all mws', t => {
@@ -75,7 +75,7 @@ test('handle errors', t => {
 
 test('allow function mw returning next', t => {
   let mws;
-  let ctx = {};
+  const ctx = {};
 
   co( function *() {
     mws = new CoMws();
@@ -85,8 +85,8 @@ test('allow function mw returning next', t => {
       return next();
     });
 
-    mws.use(function *(next){
-       this.result += ' world';
+    mws.use(function *() {
+      this.result += ' world';
     });
 
     yield mws.run(ctx);
@@ -99,7 +99,7 @@ test('allow function mw returning next', t => {
 
 test('allow function mw returning a promise', t => {
   let mws;
-  let ctx = {};
+  const ctx = {};
 
   co( function *() {
     mws = new CoMws();
@@ -113,8 +113,8 @@ test('allow function mw returning a promise', t => {
       });
     });
 
-    mws.use(function *(next){
-       this.result = 'hello';
+    mws.use(function *() {
+      this.result = 'hello';
     });
 
     yield mws.run(ctx);
@@ -127,17 +127,17 @@ test('allow function mw returning a promise', t => {
 
 test('allow function mw returning a normal value', t => {
   let mws;
-  let ctx = {};
+  const ctx = {};
 
   co( function *() {
     mws = new CoMws();
 
-    mws.use(function * (next){
+    mws.use(function * (next) {
       this.result = yield Promise.resolve('hello');
       yield next();
     });
 
-    mws.use(function (next){
+    mws.use(() => {
       this.result += ' world';
       return null;
     });
@@ -153,23 +153,23 @@ test('allow function mw returning a normal value', t => {
 
 test('allow generators, arrow and normal function with ctx arg', t => {
   let mws;
-  let ctx = {};
+  const ctx = {};
 
   co( function *() {
     mws = new CoMws();
 
-    mws.use((ctx, next) => {
-      ctx.result = 'hello';
+    mws.use((c, next) => {
+      c.result = 'hello';
       return next();
     });
 
-    mws.use(function (ctx, next){
-      ctx.result += ' magic';
+    mws.use((c, next) => {
+      c.result += ' magic';
       return next();
     });
 
-    mws.use(function (ctx, next){
-      ctx.result += ' world';
+    mws.use((c) => {
+      c.result += ' world';
     });
 
 

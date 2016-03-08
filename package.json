@@ -4,7 +4,7 @@
   "description": "koa like middlewares for any app",
   "main": "dist/index.js",
   "scripts": {
-    "test": "babel-node test/co-mws_test.js || echo failed"
+    "test": "babel-node test/co-mws_test.js && eslint ."
   },
   "engines": {
     "node": ">=4"
@@ -21,7 +21,17 @@
     "mw",
     "mws"
   ],
+  "eslintConfig": {
+    "extends": [
+      "js",
+      "features"
+    ]
+  },
   "devDependencies": {
+    "eslint": "^1.10.3",
+    "eslint-config-features": "^1.1.5",
+    "eslint-config-js": "^4.0.0",
+    "faucet": "0.0.1",
     "babel": "^4.6.4",
     "tape": "^4.5.1"
   },
