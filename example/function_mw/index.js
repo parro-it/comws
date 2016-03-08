@@ -1,27 +1,28 @@
+'use strict';
 
-var CoMws = require('comws');
-var mws = new CoMws();
+const CoMws = require('comws');
+const mws = new CoMws();
 
-mws.use(function (next){
-    var _this = this;
+mws.use(function (next) { // eslint-disable-line
+  const _this = this;
 
-    _this.result += '\n first at '+new Date().getTime();
-    return next().then(function(){
-        _this.result += '\n after second at ' + new Date().getTime();    
-    });
-    
+  _this.result += '\n first at ' + new Date().getTime();
+  return next().then(function() {
+    _this.result += '\n after second at ' + new Date().getTime();
+  });
+
 });
 
-mws.use(function *(next){
-    this.result += '\n second running at ' + new Date().getTime();
+mws.use(function *(next) {  // eslint-disable-line
+  this.result += '\n second running at ' + new Date().getTime();
 
-    return new Promise(function(resolve){
-        setTimeout(resolve,1000);    
-    });
+  return new Promise(function(resolve) {
+    setTimeout(resolve, 1000);
+  });
 });
 
-var ctx = {result:'start at ' + new Date().getTime()};
+const ctx = {result: 'start at ' + new Date().getTime()};
 
-mws.run(ctx).then(function(){
-  console.log(ctx.result);
+mws.run(ctx).then(function() {
+  process.stderr.write(ctx.result);
 });

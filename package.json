@@ -2,9 +2,9 @@
   "name": "comws",
   "version": "1.0.1",
   "description": "koa like middlewares for any app",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "test": "babel-node test/co-mws_test.js && eslint ."
+    "test": "node test/co-mws_test.js | faucet && eslint ."
   },
   "engines": {
     "node": ">=4"

@@ -34,7 +34,7 @@ const setupErrorMws = co.wrap(function *() {
     throw new Error('test-error');
   });
 
-  mws.use(function *(ctx, err) {
+  mws.use(function *(ctx, err, next) {  // eslint-disable-line
     ctx.ex = err;
   });
 
@@ -56,7 +56,7 @@ test('can construct instance', t => {
   setupMws().then(ctx => {
     t.equal(typeof ctx.mws, 'object');
     t.end();
-  });
+  }).catch(err => t.end(err));
 });
 
 test('execute all mws', t => {
@@ -70,7 +70,7 @@ test('handle errors', t => {
   setupErrorMws().then(ctx => {
     t.equal(ctx.ctx.ex.message, 'test-error');
     t.end();
-  });
+  }).catch(err => t.end(err));
 });
 
 test('allow function mw returning next', t => {
@@ -85,8 +85,9 @@ test('allow function mw returning next', t => {
       return next();
     });
 
-    mws.use(function *() {
+    mws.use(function *(next) {
       this.result += ' world';
+      next();
     });
 
     yield mws.run(ctx);
@@ -113,8 +114,9 @@ test('allow function mw returning a promise', t => {
       });
     });
 
-    mws.use(function *() {
+    mws.use(function *(next) {
       this.result = 'hello';
+      next();
     });
 
     yield mws.run(ctx);
@@ -137,8 +139,9 @@ test('allow function mw returning a normal value', t => {
       yield next();
     });
 
-    mws.use(() => {
+    mws.use(function * (next) {
       this.result += ' world';
+      yield next();
       return null;
     });
 
@@ -168,8 +171,9 @@ test('allow generators, arrow and normal function with ctx arg', t => {
       return next();
     });
 
-    mws.use((c) => {
+    mws.use((c, next) => {
       c.result += ' world';
+      next();
     });
 
 
