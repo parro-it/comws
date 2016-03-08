@@ -2,17 +2,13 @@
   "name": "comws",
   "version": "1.0.1",
   "description": "koa like middlewares for any app",
-  "main": "index.js",
   "scripts": {
     "test": "node test/co-mws_test.js | faucet && eslint ."
   },
   "engines": {
     "node": ">=4"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/shes/comws.git"
-  },
+  "repository": "parro-it/comws.git",
   "keywords": [
     "co",
     "middlewares",
@@ -41,9 +37,6 @@
     "co": "^4.0.0"
   },
   "author": "andrea@parro.it",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shes/comws/issues"
-  },
-  "homepage": "https://github.com/shes/comws"
+  "license": "MIT"
+
 }
