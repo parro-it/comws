@@ -1,9 +1,9 @@
 {
   "name": "comws",
   "version": "1.0.1",
-  "description": "koa like middlewares for any app",
+  "description": "common middlewares for node",
   "scripts": {
-    "test": "node test/co-mws_test.js | faucet && eslint ."
+    "test": "node test | faucet && eslint ."
   },
   "engines": {
     "node": ">=4"
@@ -37,6 +37,9 @@
     "co": "^4.0.0"
   },
   "author": "andrea@parro.it",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ]
 
 }

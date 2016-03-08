@@ -1,6 +1,6 @@
 'use strict';
 
-const CoMws = require('../src');
+const CoMws = require('.');
 const co = require('co');
 const test = require('tape');
 
