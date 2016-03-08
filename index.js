@@ -3,6 +3,7 @@
 const co = require('co');
 const isPromise = require('is-promise');
 const PrettyError = require('pretty-error');
+const pe = new PrettyError();
 
 function isGenerator(fn) {
   return fn.constructor.name.endsWith('GeneratorFunction');
@@ -34,7 +35,6 @@ module.exports = class CoMws {
 
     }
 
-    const pe = new PrettyError();
     const renderedError = pe.render(err);
 
     process.stderr.write(renderedError.stack + '\n');
