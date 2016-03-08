@@ -28,7 +28,6 @@
     "eslint-config-features": "^1.1.5",
     "eslint-config-js": "^4.0.0",
     "faucet": "0.0.1",
-    "babel": "^4.6.4",
     "tape": "^4.5.1"
   },
   "dependencies": {
@@ -41,5 +40,4 @@
   "files": [
     "index.js"
   ]
-
 }
