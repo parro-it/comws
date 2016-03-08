@@ -4,10 +4,10 @@
   "description": "koa like middlewares for any app",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha test/*_test.js test/**/*_test.js --require ./test/init || echo failed",
-    "test-shippable": "mkdir -p ./shippable/testresults && istanbul cover --dir ./shippable/codecoverage --report cobertura _mocha -- test/*_test.js test/**/*_test.js --require ./test/init --reporter \"xunit\" > ./shippable/testresults/mocha.xml",
-    "badge": "node build/badge.js && convert build/coverage.svg build/coverage.png",
-    "build": "babel src/index.js -o dist/index.js"
+    "test": "babel-node test/co-mws_test.js || echo failed"
+  },
+  "engines": {
+    "node": ">=4"
   },
   "repository": {
     "type": "git",
@@ -23,17 +23,12 @@
   ],
   "devDependencies": {
     "babel": "^4.6.4",
-    "chai": "^2.1.0",
-    "co": "^4.0.0",
-    "co-mocha": "^1.1.0",
-    "docflux": "^1.1.2",
-    "istanbul": "^0.3.7",
-    "istanbul-cobertura-badger": "0.0.4",
-    "mocha": "^2.1.0"
+    "tape": "^4.5.1"
   },
   "dependencies": {
     "is-promise": "^2.0.0",
-    "pretty-error": "^1.1.1"
+    "pretty-error": "^1.1.1",
+    "co": "^4.0.0"
   },
   "author": "andrea@parro.it",
   "license": "MIT",
