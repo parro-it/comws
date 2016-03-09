@@ -139,9 +139,8 @@ test('allow function mw returning a normal value', t => {
       yield next();
     });
 
-    mws.use(function * (next) {
+    mws.use(function (next) {           // eslint-disable-line
       this.result += ' world';
-      yield next();
       return null;
     });
 

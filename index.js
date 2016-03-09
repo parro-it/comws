@@ -4,6 +4,7 @@ const co = require('co');
 const isPromise = require('is-promise');
 const PrettyError = require('pretty-error');
 const pe = new PrettyError();
+const debug = require('debug')('comws');
 
 function isGenerator(fn) {
   return fn.constructor.name.endsWith('GeneratorFunction');
@@ -69,26 +70,44 @@ module.exports = class CoMws {
       const runner = isGenerator(currentMw)
         ? co.wrap(currentMw)
         : currentMw;
+      debug(`running ${currentMw.name || 'anonymous middleware'} idetified as ${isGenerator(currentMw) ? 'generator' : 'normal function'}`);
 
       let result;
 
       try {
+        debug(`running ${currentMw.name || 'anonymous middleware'} with context: ${JSON.stringify(ctx)}`);
 
         if (runner.length === 2) {
+          debug(`running ${currentMw.name || 'anonymous middleware'} with context as argument`);
           result = runner(ctx, next);
         } else {
+          debug(`running ${currentMw.name || 'anonymous middleware'} with context binded to this`);
           result = runner.call(ctx, next);
         }
 
       } catch (err) {
+        debug(`${currentMw.name || 'anonymous middleware'} throws ${err}`);
+
         return next(err);
       }
 
       if (isPromise(result)) {
-        return result.catch(next);
+        return result
+          .then(res => {
+            debug(`${currentMw.name || 'anonymous middleware'} resolved to ${res}`);
+
+            return res;
+          })
+          .catch(err => {
+            debug(`${currentMw.name || 'anonymous middleware'} rejected with ${err}`);
+
+            return next(err);
+          });
       }
 
-      return result;
+      debug(`${currentMw.name || 'anonymous middleware'} return ${result}`);
+
+      return Promise.resolve(result);
     };
 
     return step(0);
