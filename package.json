@@ -1,6 +1,6 @@
 {
   "name": "comws",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Expressive middleware for node.js",
   "scripts": {
     "test": "node test | faucet && eslint ."
