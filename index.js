@@ -75,7 +75,7 @@ module.exports = class CoMws {
       let result;
 
       try {
-        debug(`running ${currentMw.name || 'anonymous middleware'} with context: ${JSON.stringify(ctx)}`);
+        debug(`running ${currentMw.name || 'anonymous middleware'} with context`);
 
         if (runner.length === 2) {
           debug(`running ${currentMw.name || 'anonymous middleware'} with context as argument`);
