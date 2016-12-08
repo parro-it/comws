@@ -16,15 +16,15 @@ Comws is supported in all versions of node > 4.
 
 # Getting started
 
-See all example in example folder to get started.
+See all examples in example folder to get started.
 
 Open an issue if you have any question or suggestion.
 
 # Example
 
 ```js
-var CoMws = require('comws');
-var mws = new CoMws();
+const CoMws = require('comws');
+const mws = new CoMws();
 
 mws.use(function *(next){
   this.result += ' hello';
@@ -36,12 +36,37 @@ mws.use(function *(next){
   yield next();
 });
 
-var ctx = {result: 'yet another'};
+const ctx = {result: 'yet another'};
 
 mws.run(ctx).then(function() {
   //ctx.result === 'yet another hello world'
 });
 
+```
+
+# Use multiple middlewares
+
+Starting from version 2.1, you can also
+use multiple middleware in the same `use` call:
+
+```js
+const CoMws = require('comws');
+const {mw1, mw2} = require('middlewares');
+
+const mws = new CoMws();
+
+mws.use(mw1, mw2);
+```
+
+or also chain `use` calls:
+
+```js
+const CoMws = require('comws');
+const {mw1, mw2} = require('middlewares');
+
+const mws = new CoMws();
+
+mws.use(mw1).use(mw2);
 ```
 
 # Running tests
