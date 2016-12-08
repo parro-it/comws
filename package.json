@@ -17,6 +17,9 @@
     "mw",
     "mws"
   ],
+  "xo": {
+  	"import/no-unresolved": 0
+  },
   "devDependencies": {
   	"ava": "^0.17.0",
     "xo": "^0.17.1"
