@@ -16,8 +16,12 @@ module.exports = class CoMws {
   }
 
   use(mw) {
-    this.mws.push(mw);
-
+    if (arguments.length === 1) {
+      this.mws.push(mw);
+    } else {
+      this.mws.push.apply(this.mws, Array.from(arguments));
+    }
+    return this;
   }
 
   handleError(ctx, err, mwIdx) {
