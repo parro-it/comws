@@ -1,6 +1,6 @@
 {
   "name": "comws",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "Expressive middleware for node.js",
   "scripts": {
     "test": "ava && xo index.js test.js"
@@ -18,7 +18,7 @@
     "mws"
   ],
   "devDependencies": {
-  	"ava": "^0.17.0",
+    "ava": "^0.17.0",
     "xo": "^0.17.1"
   },
   "dependencies": {
