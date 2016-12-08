@@ -15,8 +15,12 @@ module.exports = class CoMws {
     this.mws = [];
   }
 
-  use(...mw) {
-    this.mws.push(...mw);
+  use(mw) {
+    if (arguments.length === 1) {
+      this.mws.push(mw)
+    } else {
+      this.mws.push.apply(this.mws, Array.from(arguments))
+    }
     return this;
   }
 
