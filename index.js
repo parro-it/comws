@@ -15,9 +15,9 @@ module.exports = class CoMws {
     this.mws = [];
   }
 
-  use(mw) {
-    this.mws.push(mw);
-
+  use(...mw) {
+    this.mws.push(...mw);
+    return this;
   }
 
   handleError(ctx, err, mwIdx) {
