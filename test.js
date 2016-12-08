@@ -1,187 +1,152 @@
-'use strict';
+import co from 'co';
+import test from 'ava';
+import CoMws from '.';
 
-const CoMws = require('.');
-const co = require('co');
-const test = require('tape');
+const setupMws = co.wrap(function * () {
+	const	mws = new CoMws();
+	const ctx = {result: 'yet another'};
 
-const setupMws = co.wrap(function *() {
-  const  mws = new CoMws();
-  const ctx = {result: 'yet another'};
+	mws.use(function * (next) {
+		this.result += yield Promise.resolve(' hello');
+		yield next();
+	});
 
-  mws.use(function *(next) {
-    this.result += yield Promise.resolve(' hello');
-    yield next();
-  });
+	mws.use(function * (next) {
+		this.result += yield Promise.resolve(' world');
+		yield next();
+	});
 
-  mws.use(function *(next) {
-    this.result += yield Promise.resolve(' world');
-    yield next();
-  });
+	yield mws.run(ctx);
 
-  yield mws.run(ctx);
-
-  return {mws, ctx};
+	return {mws, ctx};
 });
 
-const setupErrorMws = co.wrap(function *() {
-  const  mws = new CoMws();
-  mws.use(function *(next) {
-    this.result = ('hello');
-    yield next();
-  });
+const setupErrorMws = co.wrap(function * () {
+	const	mws = new CoMws();
+	mws.use(function * (next) {
+		this.result = ('hello');
+		yield next();
+	});
 
-  mws.use(function *() {
-    throw new Error('test-error');
-  });
+	// eslint-disable-next-line require-yield
+	mws.use(function * () {
+		throw new Error('test-error');
+	});
 
-  mws.use(function *(ctx, err, next) {  // eslint-disable-line
-    ctx.ex = err;
-  });
+	// eslint-disable-next-line require-yield, no-unused-vars
+	mws.use(function * (ctx, err, next) {
+		ctx.ex = err;
+	});
 
-  const ctx = {};
+	const ctx = {};
 
-  yield mws.run(ctx);
+	yield mws.run(ctx);
 
-  return {mws, ctx};
+	return {mws, ctx};
 });
 
-test('register all mws', t => {
-  setupMws().then(ctx => {
-    t.equal(ctx.mws.mws.length, 2);
-    t.end();
-  });
+test('register all mws', async t => {
+	const ctx = await setupMws();
+	t.is(ctx.mws.mws.length, 2);
 });
 
-test('can construct instance', t => {
-  setupMws().then(ctx => {
-    t.equal(typeof ctx.mws, 'object');
-    t.end();
-  }).catch(err => t.end(err));
+test('can construct instance', async t => {
+	const ctx = await setupMws();
+	t.is(typeof ctx.mws, 'object');
 });
 
-test('execute all mws', t => {
-  setupMws().then(ctx => {
-    t.equal(ctx.ctx.result, 'yet another hello world');
-    t.end();
-  });
+test('execute all mws', async t => {
+	const ctx = await setupMws();
+	t.is(ctx.ctx.result, 'yet another hello world');
 });
 
-test('handle errors', t => {
-  setupErrorMws().then(ctx => {
-    t.equal(ctx.ctx.ex.message, 'test-error');
-    t.end();
-  }).catch(err => t.end(err));
+test('handle errors', async t => {
+	const ctx = await setupErrorMws();
+	t.is(ctx.ctx.ex.message, 'test-error');
 });
 
-test('allow function mw returning next', t => {
-  let mws;
-  const ctx = {};
+test('allow function mw returning next', async t => {
+	const ctx = {};
+	const mws = new CoMws();
 
-  co( function *() {
-    mws = new CoMws();
+	mws.use(function (next) {
+		this.result = 'hello';
+		return next();
+	});
 
-    mws.use(function(next) {
-      this.result = 'hello';
-      return next();
-    });
+	// eslint-disable-next-line require-yield
+	mws.use(function * (next) {
+		this.result += ' world';
+		next();
+	});
 
-    mws.use(function *(next) {
-      this.result += ' world';
-      next();
-    });
+	await mws.run(ctx);
 
-    yield mws.run(ctx);
-
-  }).then(() => {
-    t.equal(ctx.result, 'hello world');
-    t.end();
-  });
+	t.is(ctx.result, 'hello world');
 });
 
-test('allow function mw returning a promise', t => {
-  let mws;
-  const ctx = {};
+test('allow function mw returning a promise', async t => {
+	const ctx = {};
 
-  co( function *() {
-    mws = new CoMws();
+	const mws = new CoMws();
 
-    mws.use(function(next) {
-      return new Promise((resolve) => {
-        next().then(()=>{
-          this.result += ' world';
-          resolve();
-        });
-      });
-    });
+	mws.use(function (next) {
+		return new Promise(resolve => {
+			next().then(() => {
+				this.result += ' world';
+				resolve();
+			});
+		});
+	});
 
-    mws.use(function *(next) {
-      this.result = 'hello';
-      next();
-    });
+	// eslint-disable-next-line require-yield
+	mws.use(function * (next) {
+		this.result = 'hello';
+		next();
+	});
 
-    yield mws.run(ctx);
-  }).then(() => {
-    t.equal(ctx.result, 'hello world');
-    t.end();
-  });
-
+	await mws.run(ctx);
+	t.is(ctx.result, 'hello world');
 });
 
-test('allow function mw returning a normal value', t => {
-  let mws;
-  const ctx = {};
+test('allow function mw returning a normal value', async t => {
+	const ctx = {};
+	const mws = new CoMws();
 
-  co( function *() {
-    mws = new CoMws();
+	mws.use(function * (next) {
+		this.result = yield Promise.resolve('hello');
+		yield next();
+	});
 
-    mws.use(function * (next) {
-      this.result = yield Promise.resolve('hello');
-      yield next();
-    });
+	// eslint-disable-next-line require-yield, no-unused-vars
+	mws.use(function (next) {
+		this.result += ' world';
+		return null;
+	});
 
-    mws.use(function (next) {           // eslint-disable-line
-      this.result += ' world';
-      return null;
-    });
-
-
-    yield mws.run(ctx);
-
-  }).then(() => {
-    t.equal(ctx.result, 'hello world');
-    t.end();
-  });
+	await mws.run(ctx);
+	t.is(ctx.result, 'hello world');
 });
 
-test('allow generators, arrow and normal function with ctx arg', t => {
-  let mws;
-  const ctx = {};
+test('allow generators, arrow and normal function with ctx arg', async t => {
+	const ctx = {};
+	const mws = new CoMws();
 
-  co( function *() {
-    mws = new CoMws();
+	mws.use((c, next) => {
+		c.result = 'hello';
+		return next();
+	});
 
-    mws.use((c, next) => {
-      c.result = 'hello';
-      return next();
-    });
+	mws.use((c, next) => {
+		c.result += ' magic';
+		return next();
+	});
 
-    mws.use((c, next) => {
-      c.result += ' magic';
-      return next();
-    });
+	mws.use((c, next) => {
+		c.result += ' world';
+		next();
+	});
 
-    mws.use((c, next) => {
-      c.result += ' world';
-      next();
-    });
-
-
-    yield mws.run(ctx);
-
-  }).then(() => {
-    t.equal(ctx.result, 'hello magic world');
-    t.end();
-  });
+	await mws.run(ctx);
+	t.is(ctx.result, 'hello magic world');
 });
-
-

@@ -1,14 +1,14 @@
 {
-  "name": "helloworld",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"no test exists\" && exit 0"
-  },
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "comws": "^1.0.0"
-  }
+	"name": "helloworld",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"no test exists\" && exit 0"
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"comws": "^1.0.0"
+	}
 }

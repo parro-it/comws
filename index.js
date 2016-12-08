@@ -3,117 +3,115 @@
 const co = require('co');
 const isPromise = require('is-promise');
 const PrettyError = require('pretty-error');
+
 const pe = new PrettyError();
 const debug = require('debug')('comws');
 
 function isGenerator(fn) {
-  return fn.constructor.name.endsWith('GeneratorFunction');
+	return fn.constructor.name.endsWith('GeneratorFunction');
 }
 
 module.exports = class CoMws {
-  constructor() {
-    this.mws = [];
-  }
+	constructor() {
+		this.mws = [];
+	}
 
-  use(mw) {
-    if (arguments.length === 1) {
-      this.mws.push(mw);
-    } else {
-      this.mws.push.apply(this.mws, Array.from(arguments));
-    }
-    return this;
-  }
+	use(mw) {
+		if (arguments.length === 1) {
+			this.mws.push(mw);
+		} else {
+			this.mws.push.apply(this.mws, Array.from(arguments));
+		}
+		return this;
+	}
 
-  handleError(ctx, err, mwIdx) {
-    let idxErrMiddleware = mwIdx + 1;
+	handleError(ctx, err, mwIdx) {
+		let idxErrMiddleware = mwIdx + 1;
 
-    while (idxErrMiddleware < this.mws.length) {
+		while (idxErrMiddleware < this.mws.length) {
+			const errMiddleware = this.mws[idxErrMiddleware];
 
-      const errMiddleware = this.mws[idxErrMiddleware];
+			if (errMiddleware.length === 3) {
+				const runner = co.wrap(errMiddleware);
+				return runner(ctx, err, () => {});
+			}
 
-      if (errMiddleware.length === 3) {
-        const runner = co.wrap(errMiddleware);
-        return runner(ctx, err, () => {});
-      }
+			idxErrMiddleware++;
+		}
 
-      idxErrMiddleware++;
+		const renderedError = pe.render(err);
 
-    }
+		process.stderr.write(renderedError.stack + '\n');
+		return err;
+	}
 
-    const renderedError = pe.render(err);
+	run(ctx) {
+		const step = idx => {
+			if (idx === this.mws.length) {
+				return Promise.resolve(true);
+			}
 
-    process.stderr.write(renderedError.stack + '\n');
-    return err;
-  }
+			const currentMw = this.mws[idx];
 
-  run(ctx) {
+			const next = err => {
+				if (err) {
+					return this.handleError(ctx, err, idx);
+				}
 
-    const step = (idx) => {
-      if (idx === this.mws.length) {
-        return Promise.resolve(true);
-      }
+				const result = step(idx + 1);
 
-      const currentMw = this.mws[idx];
+				if (isPromise(result)) {
+					return result;
+				}
 
-      const next = (err) => {
-        if (err) {
-          return this.handleError(ctx, err, idx);
-        }
+				return result instanceof Error ?
+					Promise.reject(result) :
+					Promise.resolve(result);
+			};
 
-        const result = step(idx + 1);
+			const runner = isGenerator(currentMw) ?
+				co.wrap(currentMw) :
+				currentMw;
 
-        if (isPromise(result)) {
-          return result;
-        }
+			debug(`running ${currentMw.name || 'anonymous middleware'} idetified as ${isGenerator(currentMw) ? 'generator' : 'normal function'}`);
 
-        return result instanceof Error
-          ? Promise.reject(result)
-          : Promise.resolve(result);
-      };
+			let result;
 
-      const runner = isGenerator(currentMw)
-        ? co.wrap(currentMw)
-        : currentMw;
-      debug(`running ${currentMw.name || 'anonymous middleware'} idetified as ${isGenerator(currentMw) ? 'generator' : 'normal function'}`);
+			try {
+				debug(`running ${currentMw.name || 'anonymous middleware'} with context`);
 
-      let result;
+				if (runner.length === 2) {
+					debug(`running ${currentMw.name || 'anonymous middleware'} with context as argument`);
+					result = runner(ctx, next);
+				} else {
+					debug(`running ${currentMw.name || 'anonymous middleware'} with context binded to this`);
+					result = runner.call(ctx, next);
+				}
+			} catch (err) {
+				debug(`${currentMw.name || 'anonymous middleware'} throws ${err}`);
 
-      try {
-        debug(`running ${currentMw.name || 'anonymous middleware'} with context`);
+				return next(err);
+			}
 
-        if (runner.length === 2) {
-          debug(`running ${currentMw.name || 'anonymous middleware'} with context as argument`);
-          result = runner(ctx, next);
-        } else {
-          debug(`running ${currentMw.name || 'anonymous middleware'} with context binded to this`);
-          result = runner.call(ctx, next);
-        }
+			if (isPromise(result)) {
+				return result
+					.then(res => {
+						debug(`${currentMw.name || 'anonymous middleware'} resolved to ${res}`);
 
-      } catch (err) {
-        debug(`${currentMw.name || 'anonymous middleware'} throws ${err}`);
+						return res;
+					})
+					.catch(err => {
+						debug(`${currentMw.name || 'anonymous middleware'} rejected with ${err}`);
 
-        return next(err);
-      }
+						return next(err);
+					});
+			}
 
-      if (isPromise(result)) {
-        return result
-          .then(res => {
-            debug(`${currentMw.name || 'anonymous middleware'} resolved to ${res}`);
+			debug(`${currentMw.name || 'anonymous middleware'} return ${result}`);
 
-            return res;
-          })
-          .catch(err => {
-            debug(`${currentMw.name || 'anonymous middleware'} rejected with ${err}`);
+			return Promise.resolve(result);
+		};
 
-            return next(err);
-          });
-      }
-
-      debug(`${currentMw.name || 'anonymous middleware'} return ${result}`);
-
-      return Promise.resolve(result);
-    };
-
-    return step(0);
-  }
+		return step(0);
+	}
 };

@@ -3,7 +3,7 @@
   "version": "2.0.3",
   "description": "Expressive middleware for node.js",
   "scripts": {
-    "test": "node test | faucet && eslint ."
+    "test": "ava && xo"
   },
   "engines": {
     "node": ">=4"
@@ -17,18 +17,9 @@
     "mw",
     "mws"
   ],
-  "eslintConfig": {
-    "extends": [
-      "js",
-      "features"
-    ]
-  },
   "devDependencies": {
-    "eslint": "^1.10.3",
-    "eslint-config-features": "^1.1.5",
-    "eslint-config-js": "^4.0.0",
-    "faucet": "0.0.1",
-    "tape": "^4.5.1"
+  	"ava": "^0.17.0",
+    "xo": "^0.17.1"
   },
   "dependencies": {
     "co": "^4.0.0",
