@@ -1,5 +1,7 @@
 # comws
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/parro-it/comws.svg)](https://greenkeeper.io/)
+
 > Expressive middleware for node.js using generators via [co](https://github.com/visionmedia/co) to make node applications more enjoyable to write. Comws middleware flow in a stack-like manner exactly like koa ones. Use of generators also greatly increases the readability and robustness of your application.
 
 [![Travis Build Status](https://img.shields.io/travis/parro-it/comws.svg)](http://travis-ci.org/parro-it/comws)
