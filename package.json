@@ -18,14 +18,14 @@
     "mws"
   ],
   "devDependencies": {
-    "ava": "^0.17.0",
-    "xo": "^0.17.1"
+    "ava": "^0.18.2",
+    "xo": "^0.18.1"
   },
   "dependencies": {
     "co": "^4.0.0",
     "debug": "^2.2.0",
     "is-promise": "^2.0.0",
-    "pretty-error": "^1.1.1"
+    "pretty-error": "^2.0.3"
   },
   "author": "andrea@parro.it",
   "license": "MIT",
