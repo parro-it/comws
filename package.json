@@ -19,7 +19,7 @@
   ],
   "devDependencies": {
     "ava": "^0.24.0",
-    "xo": "^0.18.1"
+    "xo": "^0.22.0"
   },
   "dependencies": {
     "co": "^4.0.0",
